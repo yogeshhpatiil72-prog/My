@@ -3,76 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b12">
 <title>PATIL NEO</title>
 
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:#080b12;
-  color:white;
-  font-family:Arial,sans-serif;
+  margin:0;background:#080b12;color:white;
+  font-family:Arial,sans-serif
 }
 header{
-  padding:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #222;
+  padding:20px;display:flex;justify-content:space-between;
+  align-items:center;border-bottom:1px solid #222
 }
 .logo{font-size:22px;font-weight:bold;cursor:pointer}
-.logo span{color:#b9f36b}
+.logo span,.hero span{color:#b9f36b}
+button{
+  background:#b9f36b;border:0;padding:12px 16px;
+  border-radius:8px;font-weight:bold;cursor:pointer
+}
 input{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:1px solid #333;
-  background:#151923;
-  color:white;
+  width:100%;padding:14px;border-radius:10px;
+  border:1px solid #333;background:#151923;color:white
 }
 .container{padding:20px}
 .hero{
-  padding:35px 20px;
-  border-radius:18px;
+  padding:35px 20px;border-radius:18px;
   background:linear-gradient(135deg,#26233f,#101722);
-  margin-bottom:25px;
+  margin-bottom:25px
 }
 .hero h1{font-size:38px;margin-bottom:10px}
-.hero span{color:#b9f36b}
-button{
-  background:#b9f36b;
-  border:0;
-  padding:12px 16px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-}
+.muted{color:#a3aabd;font-size:13px}
 .grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:15px;
-  margin-top:20px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;margin-top:20px
 }
 .card{
-  background:#131823;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid #252b38;
+  background:#131823;border-radius:12px;
+  overflow:hidden;border:1px solid #252b38;min-width:0
 }
 .card img{
-  width:100%;
-  height:210px;
-  object-fit:cover;
+  width:100%;height:210px;object-fit:cover;background:#202532
 }
 .info{padding:12px}
-.info h3{margin:0 0 8px}
-.muted{color:#a3aabd;font-size:13px}
+.info h3{margin:0 0 8px;overflow-wrap:anywhere}
+.info button{margin:4px 3px 0 0}
 footer{
-  padding:25px;
-  color:#999;
-  text-align:center;
-  margin-top:30px;
+  padding:25px;color:#999;text-align:center;margin-top:30px
 }
+#status{margin-top:12px}
 @media(min-width:700px){
   .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
@@ -83,9 +62,7 @@ footer{
 
 <header>
   <div class="logo" id="logo">PATIL <span>NEO</span></div>
-  <button onclick="alert('Premium features coming soon!')">
-    PREMIUM
-  </button>
+  <button id="premiumBtn">PREMIUM</button>
 </header>
 
 <div class="container">
@@ -93,25 +70,17 @@ footer{
   <section class="hero">
     <p>WELCOME TO PATIL NEO</p>
     <h1>Discover Your<br><span>Next Movie.</span></h1>
-    <p class="muted">
-      Explore movies and access authorized watch links.
-    </p>
-    <button onclick="document.getElementById('movies').scrollIntoView()">
+    <p class="muted">Explore movies and access authorized watch links.</p>
+    <button onclick="document.getElementById('movies').scrollIntoView({behavior:'smooth'})">
       Explore Movies ↗
     </button>
   </section>
 
-  <input
-    type="search"
-    id="search"
-    placeholder="Search movies..."
-  >
+  <input type="search" id="search" placeholder="Search movies...">
 
   <h2 id="movies">Latest Movies</h2>
-
-  <div class="grid" id="movieGrid">
-    <p class="muted">Movies will appear here.</p>
-  </div>
+  <p class="muted" id="status">Loading movies...</p>
+  <div class="grid" id="movieGrid"></div>
 
 </div>
 
@@ -121,59 +90,131 @@ footer{
 </footer>
 
 <script>
-const movies = [];
-
-function displayMovies(){
-  const search = document
-    .getElementById("search")
-    .value.toLowerCase();
-
-  const grid = document.getElementById("movieGrid");
-
-  const filtered = movies.filter(movie =>
-    movie.title.toLowerCase().includes(search)
-  );
-
-  if(filtered.length === 0){
-    grid.innerHTML =
-      '<p class="muted">No movies found.</p>';
-    return;
-  }
-
-  grid.innerHTML = filtered.map(movie => `
-    <div class="card">
-      <img src="${movie.poster}" alt="">
-      <div class="info">
-        <h3>${movie.title}</h3>
-        <p class="muted">${movie.category}</p>
-        <button onclick="window.open('${movie.watch}','_blank')">
-          Watch
-        </button>
-      </div>
-    </div>
-  `).join("");
-}
-
-document.getElementById("search")
-  .addEventListener("input",displayMovies);
+document.getElementById("premiumBtn").onclick = () => {
+  alert("Premium membership will be available soon!");
+};
 
 let clicks = 0;
 let timer;
 
-document.getElementById("logo").onclick = function(){
+document.getElementById("logo").addEventListener("click", () => {
   clicks++;
   clearTimeout(timer);
+  timer = setTimeout(() => clicks = 0, 1500);
 
-  timer = setTimeout(() => clicks = 0,1500);
-
-  if(clicks === 3){
+  if (clicks === 3) {
     clicks = 0;
     alert("Admin panel will be connected in the next step.");
   }
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, query, where
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAoDWEwBikrd6M1S3XRBFsQdxnuGenAwsM",
+  authDomain: "patill-neo.firebaseapp.com",
+  projectId: "patill-neo",
+  storageBucket: "patill-neo.firebasestorage.app",
+  messagingSenderId: "1016370117356",
+  appId: "1:1016370117356:web:7ce18142910de0112483c9",
+  measurementId: "G-GV7V87PE5H"
 };
 
-displayMovies();
+const grid = document.getElementById("movieGrid");
+const status = document.getElementById("status");
+const search = document.getElementById("search");
+let movies = [];
+
+function safeUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function displayMovies() {
+  const term = search.value.trim().toLowerCase();
+
+  const filtered = movies.filter(movie =>
+    (movie.title || "").toLowerCase().includes(term) ||
+    (movie.category || "").toLowerCase().includes(term)
+  );
+
+  grid.replaceChildren();
+
+  if (!filtered.length) {
+    status.textContent = movies.length
+      ? "No matching movies found."
+      : "No published movies available yet.";
+    return;
+  }
+
+  status.textContent = "";
+
+  filtered.forEach(movie => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const img = document.createElement("img");
+    img.alt = (movie.title || "Movie") + " poster";
+    img.loading = "lazy";
+    img.src = safeUrl(movie.poster) || "";
+    img.onerror = () => { img.removeAttribute("src"); };
+
+    const info = document.createElement("div");
+    info.className = "info";
+
+    const title = document.createElement("h3");
+    title.textContent = movie.title || "Untitled";
+
+    const category = document.createElement("p");
+    category.className = "muted";
+    category.textContent = movie.category || "Movie";
+
+    info.append(title, category);
+
+    const watchUrl = safeUrl(movie.watchUrl || movie.watch);
+    if (watchUrl) {
+      const watch = document.createElement("button");
+      watch.textContent = "Watch";
+      watch.addEventListener("click", () => {
+        window.open(watchUrl, "_blank", "noopener,noreferrer");
+      });
+      info.append(watch);
+    }
+
+    card.append(img, info);
+    grid.append(card);
+  });
+}
+
+search.addEventListener("input", displayMovies);
+
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const q = query(
+    collection(db, "movies"),
+    where("published", "==", true)
+  );
+
+  const snapshot = await getDocs(q);
+  movies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  displayMovies();
+} catch (error) {
+  console.error("Firebase error:", error);
+  status.textContent =
+    "Movies could not load. Please check Firebase connection and Firestore rules.";
+}
 </script>
 
 </body>
-</html>
+  </html>
